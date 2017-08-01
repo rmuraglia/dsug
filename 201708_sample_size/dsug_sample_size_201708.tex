@@ -1,0 +1,275 @@
+\documentclass{beamer} % regular slide type
+% \documentclass[compress]{beamer} % makes things tighter
+% \documentclass[handout]{beamer} % to make handouts (aka remove pauses)
+\usepackage{amsmath, graphics, graphicx, tabularx, algorithm, algorithmic, appendixnumberbeamer, siunitx, multicol} % load a bunch of useful packages
+
+\let\Tiny=\tiny % this gets rid of a super annoying font warning
+\def \dropboxpath {/Users/rmuraglia/Dropbox/} % shortcut for pointers in dropbox 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEME DEFINITION %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usetheme{Warsaw} % bulkier but more informative header, if too big can try compress option (line 2)
+\usetheme{Frankfurt} % if even with compress is too ugly, then this is a nicer minimal header
+
+% this removes the navigation buttons on each slide
+\setbeamertemplate{navigation symbols}{}
+
+% this changes the footer design
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot} % this is the normal first box with the author name
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.60\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot} % display talk title in central box
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.15\paperwidth,ht=2.25ex,dp=1ex,center]{slide num in head/foot} % I created this box to have the slide counter
+    \insertframenumber{} / \inserttotalframenumber
+  \end{beamercolorbox}
+  }%
+  \vskip0pt%
+}
+
+% to tweak the size of the boxes, change the [wd=.XX\paperwidth] param
+
+% depending on which theme, select one of the bottom lines to get nicer colors
+% \setbeamercolor{slide num in head/foot}{fg=white, bg=black} % Warsaw theme: change the color to match the first box
+\setbeamercolor{slide num in head/foot}{fg=white, bg=structure.fg} % if using Frankfurt theme, use this color definition
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% METHOD FOR CITING ON SLIDE%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[absolute,overlay]{textpos}
+
+\setbeamercolor{framesource}{fg=black} % can do something like black!XX to make it (100-XX)% white for shades of gray
+\setbeamerfont{framesource}{size=\tiny}
+
+\newcommand{\source}[1]{
+  \begin{textblock*}{\textwidth}(1.8cm,8.6cm)
+    \begin{beamercolorbox}[ht=0.5cm,right]{framesource}
+     \usebeamerfont{framesource}\usebeamercolor[fg]{framesource} {#1}
+   \end{beamercolorbox}
+  \end{textblock*}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% set title, author etc %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% format is \item[short]{long}
+% if omit [short], then will inherit from {long}
+\title[DSUG: Sample Size Calculations]{Champaign-Urbana Data Science User Group: A Beginner's Guide to Sample Size Calculations}
+% \subtitle{Subtitle here if desired}
+\author{Ryan Muraglia}
+\date{August 4, 2017}
+\institute{Oath Champaign}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% END OF PREAMBLE %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% your basic title page
+\frame{ \titlepage }
+
+% an overview slide
+\frame{
+  \frametitle{Outline}
+  \tableofcontents
+}
+
+
+
+\section{Basic text and familiar stuff}
+
+\subsection{A typical slide}
+
+\frame{
+  \frametitle{Nothing fancy}
+  Just writing text directly into a slide works, but is pretty spartan...
+}
+
+\frame{
+  You \emph{could} do without a title, but the slide looks pretty naked without it.
+
+  Perhaps you could consider it if you were \textbf{only} putting a large figure on the slide.
+}
+
+\subsection{Mathy things}
+
+\frame{
+  \frametitle{Typesetting math}
+  And of course, you can typeset math like you're accustomed to in \LaTeX :
+
+  You can either do it inline: $e^{i \pi} + 1 = 0$, or as an equation:
+
+  \begin{equation}
+    e^{i \pi} + 1 = 0
+  \end{equation}
+}
+
+\subsection{Multiple columns}
+
+\frame{
+  \frametitle{Two column slide}
+  \begin{columns}
+  \column{0.5\textwidth}
+  Obviously you'll want to have slides with a bit more structure to them...
+  \column{0.5\textwidth}
+  And this environment lets you define your own columns
+  \end{columns}
+}
+
+\frame{
+  \frametitle{More exotic layouts?}
+  \begin{columns}
+  \column{0.4\textwidth}
+  And it shouldn't surprise you that you can...
+  \column{0.25\textwidth}
+  totally customize the number...
+  \column{0.1\textwidth}
+  and widths of the columns.
+  \end{columns}
+}
+
+\subsection{Lists and tables}
+
+\frame{
+  \frametitle{More familiar things}
+  \begin{columns}
+  \column{0.5\textwidth}
+  Lists of all kinds (itemize, enumerate, etc)
+  \begin{itemize}
+    \item are
+    \item fair
+    \item game
+  \end{itemize}
+  \column{0.5\textwidth}
+  As are tables
+  \begin{table}
+    \scalebox{1}{
+    \begin{tabular}{c|c|c}
+    Field 1 & Field 2 & Field 3 \\ \hline \hline
+    Dat 1 & Dat 2 & Dat 3 \\
+    Dat 4 & Dat 5 & Dat 6
+    \end{tabular}
+    }
+  \end{table}
+  \end{columns}
+}
+
+\subsection{Graphics}
+
+\frame{
+  \frametitle{Obviously you can insert images too}
+  I commented the line out, since it won't compile without the photo on your drive, but I'm sure you can figure it out after inspecting the tex file.
+  % \includegraphics[scale=0.3]{citrus.jpg}
+  \vspace{10ex}
+
+  By the way, if you need to add vertical space for vertical separation (as opposed to horizontal via the columns), you can use the vspace command (even though this kind of manual adjustment is generally frowned upon in the latex community)
+}
+
+\section{Presentation specific things}
+
+\frame{
+  \frametitle{Section highlighting}
+  \tableofcontents[currentsection]
+}
+
+\subsection{Slide timings}
+
+\frame{
+  \frametitle{And subsection highlighting too}
+  \tableofcontents[currentsection, currentsubsection]
+}
+
+\frame{
+  \frametitle{Basic timings}
+  \begin{itemize}
+    \item As is so commonly used in talks...
+    \pause
+    \item You can add pauses in your talk...
+    \pause
+    \item To delay what appears on the slide
+  \end{itemize}
+  This is the most basic version of adding pauses. You can add more wrinkles, like...
+}
+
+\frame{
+  \setbeamercolor{alerted text}{fg=gray!50}
+  \frametitle{Alter slide with timing}
+  \begin{itemize}
+    \item In addition to just delaying what shows up
+    \pause
+    \item \alert<3>{You can control other aspects of timing as well}
+    \pause
+    \item Like dimming previously displayed text
+  \end{itemize}
+  Of course, you could also use that to highlight text for emphasis. Just choose a different color! This alert system is really deep and customizable, just play around with it.
+}
+
+\subsection{A custom method}
+\frame{
+  \frametitle{Citing things on slide}
+  I got pretty tired of putting source on the slide the old way, so I figured out a tiny little custom command that gives me a little shortcut for having a little citating, right bottom aligned.
+
+  \source{J. Johnson and friends}
+}
+
+\frame{
+  \frametitle{dummy title}
+  \begin{figure}
+  \centering
+  \includegraphics[scale=0.5]{iter-031.png} 
+  \end{figure}
+}
+
+\section{Additional beamer style options}
+
+\subsection{Blocks}
+
+\frame{
+  \frametitle{Blocks can be used for emphasis}
+  There are a bunch of different types of blocks:
+  \begin{block}{Basic block}
+  Used for generic emphasized text
+  \end{block}
+  Block environments are: block, theorem, lemma, proof, corollary, example and alertblock. 
+
+  Normal blocks are blue, examples are green and alerts are red.
+}
+
+\subsection{Algorithms}
+
+\frame{
+  \frametitle{Algorithm typesetting}
+  \begin{algorithm}[H]
+  \caption{Algorithm A}
+  \begin{algorithmic}[1]
+  \STATE The algorithmic pacakge is great for algorithms in latex
+  \STATE I tend to use inline math here $E=mc^2$
+  \FOR{$i=1$ to $N$}
+    \STATE obviously it supports for loops
+    \STATE and other control statements
+  \ENDFOR
+  \STATE check out the algorithmic package documentation for more
+  \end{algorithmic}
+  \end{algorithm}
+}
+
+\section*{}
+
+\frame{
+  \frametitle{closing words}
+  Obviously there is a ton more to do, but this should be a decent start. My favorite beamer reference when starting was Charles Batts' beamer tutorial.
+
+  The last thing I'll point out is that this slide has nothing highlighted up top. Useful to define an empty section for the acknowledgements or whatever.
+}
+
+\end{document}
