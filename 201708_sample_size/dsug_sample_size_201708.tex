@@ -78,196 +78,357 @@
 % your basic title page
 \frame{ \titlepage }
 
-% an overview slide
+% hi my name is Ryan Muraglia, and I am a data scientist at Oath (formerly Yahoo) Champaign, and today I'm gonna give a mini tutorial on doing sample size calculations for A/B testing.
+% now I know that this isn't exactly the sexiest topic for a talk in the world -- as data scientists, we're constantly learning new frameworks and technologies and algorithms and other impressive super fun cutting edge stuff, but /sometimes/ you'll get a request from your manager *ahem Matt*, that'll bring you back down to Earth and force you to shore up your fundamentals
+% and that's why I'm here today, to empower you all with some knowledge and tangible skills so that when you face this problem you'll be able to hit the ground running
+% one important note: this is something I just recently had to unearth from the recesses of my brain and relearn, so I'm definitely not an absolute authority on it -- if I make mistakes, please let me know, and we can have an errata on the meetup group page or something
+
 \frame{
-  \frametitle{Outline}
-  \tableofcontents
+  % alright so let's start by having a clear problem statement to contextualize what we're doing today, so here's a maybe not-so-hypothetical situation:
+  \frametitle{Problem Statement}
+  To improve user engagement (as measured by daily time spent in app in seconds per user), you and your team just finished developing a new news article recommendation algorithm for your app. 
+
+  Before rolling out the change to all of your users, you've been tasked with ``proving'' that the new algorithm does indeed improve user engagement. 
+
+  Your manager says that you'll be able to submit a request to try out the new algorithm on some of the userbase, but to be careful with how much you request, since your request is more likely to get denied as you ask for more and more test users.
 }
 
-\section{Basic text and familiar stuff}
-
-\subsection{A typical slide}
+% just out of curiosity -- and I won't be drilling you if you raise your hand, so no pressure -- but who knows what they'd do if asked to do this, right off the top of their head?
 
 \frame{
-  \frametitle{Nothing fancy}
-  Just writing text directly into a slide works, but is pretty spartan...
+  \frametitle{Ring a bell?}
+  A/B testing, hypothesis testing, statistical power,  confidence intervals, $\mathcal{X}^2$ test vs $Z$-test vs student's $t$-test vs ANOVA, paired vs unpaired, one-tailed vs two-tailed, type I and type II errors...
+  % \pause
+
+  % \begin{itemize}
+  %   \item ``I just took stats last semester, but the material didn't really stick, since I was cramming for exams''
+  %   \pause
+  %   \item ``I definitely learned this at some point, but it'll take some time to retrieve that info''
+  %   \pause
+  %   \item ``The last time I thought about this, I still had hair on my head. Where's my trusty old stats book''
+  % \end{itemize}
 }
 
+% so let's solidify this skill and empower you, so that by the end of this talk, you'll be confident in tackling this problem if presented to you
+
+\section{Hypothesis testing}
+
+\subsection{01}
+% so where does this story start? with hypothesis testing.
 \frame{
-  You \emph{could} do without a title, but the slide looks pretty naked without it.
-
-  Perhaps you could consider it if you were \textbf{only} putting a large figure on the slide.
-}
-
-\subsection{Mathy things}
-
-\frame{
-  \frametitle{Typesetting math}
-  And of course, you can typeset math like you're accustomed to in \LaTeX :
-
-  You can either do it inline: $e^{i \pi} + 1 = 0$, or as an equation:
-
-  \begin{equation}
-    e^{i \pi} + 1 = 0
-  \end{equation}
-}
-
-\subsection{Multiple columns}
-
-\frame{
-  \frametitle{Two column slide}
+  \frametitle{Searching for statistical significance}
+  \begin{block}{Null and alternative hypotheses}
+  % Essentially, hypothesis testing asks the question ``are my groups statistically the same or different?''
+  \begin{itemize}
+    \item $H_0$: The control and experimental groups are the same
+    \item $H_1$: The control and experimental groups are different
+  \end{itemize}
+  \end{block}
+  \pause
+  % but the nature of same and different will depend greatly on your data.
+  % if you data looks like this, you would do something different from this, not to mention this, or this, or this, this, this etc
   \begin{columns}
-  \column{0.5\textwidth}
-  Obviously you'll want to have slides with a bit more structure to them...
-  \column{0.5\textwidth}
-  And this environment lets you define your own columns
+  \column{0.3\textwidth}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.06]{fig01.png} \\
+    \pause
+    \includegraphics[scale=0.06]{fig02.png}
+    \pause
+  \end{figure}
+  \column{0.3\textwidth}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.06]{fig03.png} \\
+    \pause
+    \includegraphics[scale=0.06]{fig04.png}
+    \pause
+  \end{figure}
+  \column{0.3\textwidth}
+  \begin{figure}[t]
+    \centering
+    \includegraphics[scale=0.06]{fig05.png} \\
+    \pause
+    \vspace{4ex}
+  \end{figure}
+  And more...
+  \vspace{3ex}
   \end{columns}
 }
 
+\subsection{02}
 \frame{
-  \frametitle{More exotic layouts?}
+  \frametitle{The meaning of ``different'' \& choice of statistical test}
+  \begin{columns}
+  \column{0.35\textwidth}
+  It depends on what kind of data you have
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.14]{flow1.jpg}
+  \end{figure}
+  \column{0.65\textwidth}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.1]{flow2.jpg} \\
+    \includegraphics[scale=0.1]{flow3.jpg}
+  \end{figure}
+  \end{columns}
+}
+
+\subsection{03}
+% for now, let's focus on this [2 normals] case
+\frame{
+  \frametitle{A/B testing example}
+  \begin{columns}
+  \column{0.5\textwidth}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.1]{fig01.png}
+  \end{figure}
+  \column{0.5\textwidth}
+  \begin{block}{Hypotheses}
+  \begin{itemize}
+    \item $H_0$: The new algorithm has no impact on average user engagement
+    \item $H_1$: The new algorithm increases average user engagement
+  \end{itemize}
+  \end{block}
+  \end{columns}
+}
+
+\subsection{04}
+\frame{
+  \frametitle{Choice of statistical test}
+  In this case, we will use an unpaired, two-sample, one-tailed t-test.
+  \begin{block}{Why this test?}
+  \begin{description}
+    \item [unpaired:]{the samples in each group do not correspond to one another (they aren't before and after measurements)}
+    \item [two-sample:]{we are comparing two population means, not one population mean to a known constant}
+    \item [one-tailed:]{we are looking for a directional change (increase), not just any deviation} 
+    \item [t-test:]{appropriate for comparison of means of normally distributed data when variances are unknown} 
+  \end{description}
+  \source{Note: when dealing with large sample sizes, the t and Z test are essentially equivalent, since\\degrees of freedom for t-test gets so large that the t-distribution approaches the standard normal.}
+  \end{block}
+}
+
+\section{Central limit theorem}
+
+\subsection{01}
+\frame{
+  \frametitle{But my data isn't normally distributed!}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.1]{fig06.png}
+  \end{figure}
+  \begin{block}{Central limit theorem}
+  The average of a large number of iid samples will be normally distributed, as $\mathcal{N}(\mu, \sigma^2/n)$. Where $\mu$ and $\sigma$ are the mean and variance of the underlying distribution, and $n$ is the number of samples we are averaging over. This is true, regardless of the underlying distribution.
+  \end{block}
+}
+
+\subsection{02}
+\frame{
+  \frametitle{CLT in action}
+  \begin{columns}
+  \column{0.3\textwidth}
+  Say your underlying distribution is skewed like this...
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.06]{fig07.png}
+  \end{figure}
+  \column{0.7\textwidth}
+  Watch as the CLT works its magic and makes the distribution of the sampled mean increasingly normal and narrow as the number of samples increases:
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.14]{fig08.png}
+  \end{figure}
+  \end{columns}
+}
+
+% \subsection{06}
+% \frame{
+%   \frametitle{CLT take home message}
+%   As long as you are comparing means and your sample sizes are big enough, you are safe to use a t-test, even when your data are not originally normally distributed
+% }
+
+\section{Determining sample size}
+
+\subsection{01}
+\frame{
+  \frametitle{Bringing it all together}
+  What we already have:
+  \begin{itemize}
+    \item Normally distributed data
+    \item A statistical test, and it's associated test statistic: \\ \medskip
+    \centerline{$t = \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}$}
+  \end{itemize}
+
+  What we're still missing:
+  \begin{itemize}
+    \item Error rates
+    \item Expected effect size
+    \item Required sample size
+  \end{itemize}
+}
+
+\subsection{02}
+\frame{
+  \frametitle{Back to hypothesis testing}
+  \begin{block}{Type I error}
+  Falsely rejecting $H_0$ when $H_0$ is true.\\
+  $\alpha$ denotes the probability of committing a type I error.
+  \end{block}
+  \begin{block}{Type II error}
+  Falsely accepting $H_0$ when $H_1$ is true.\\
+  $\beta$ denotes the probability of committing a type II error.
+  \end{block}
+
+  As part of your experiment design, you need to choose error rates you're willing to live with. \\
+  Common values are $\alpha = 0.05$ and $\beta = 0.1$, which correspond to critical test statistic values of 1.65 and -1.28.
+
+  \source{Look these critical values up in a Z-table -- remember that we're in a large sample size regime where the t-distribution is basically normal, so we don't need to mess around with the degrees of freedom in a t-table.}
+}
+
+\subsection{03}
+\frame{
+  \frametitle{Expected effect size}
+  \begin{block}{Effect size (Cohen's $d$)}
+  \centerline{$d=\frac{\mu_1 - \mu_2}{\sigma}$}
+  \end{block}
+
+  Effect sizes help to contextualize the severity of a difference in means by scaling it by the standard deviation.\\
+  For your experiment, you will have to have some idea of the effect size you are expecting to see -- a pilot experiment is a good way to get a feel for this.\\
+  Alternatively, you can calculate required sample sizes for a range of effect sizes.
+}
+
+\subsection{04}
+\frame{
+  \frametitle{Two conditions to satisfy}
+  Recall that we have a test statistic: \\ \medskip
+  \centerline{$t = \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}$} \medskip
+  Let's assume that $s_1 = s_2$ and $n_1 = n_2$ and simplify: \\ \medskip
+  \centerline{$t = \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{2s^2/n}}$} \medskip
+  \hrule
+  \medskip
+  \begin{columns}
+  \column{0.5\textwidth}
+  \centerline{\underline{Type I error}}
+  We require the computed t-statistic to be $\leq$ the critical test statistic, $t_\alpha$. For the null hypothesis, $\Delta = 0$.
+  \begin{align*}
+    \frac{(\bar{x}_1 - \bar{x}_2)}{\sqrt{2s^2/n}} \leq t_\alpha
+  \end{align*}
+  \column{0.5\textwidth}
+  \centerline{\underline{Type II error}}
+  We require the computed t-statistic to be $\geq$ the critical test statistic, $t_\beta$. For the alternative hypothesis, $\Delta = \mu_1 - \mu_2$
+  \begin{align*}
+    \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{2s^2/n}} \geq t_\beta
+  \end{align*}
+  \end{columns}
+}
+
+\subsection{05}
+\frame{
+  \frametitle{A threshold value to satisfy both conditions}
+  This gives us a little system of equations we can solve for $n$:
   \begin{columns}
   \column{0.4\textwidth}
-  And it shouldn't surprise you that you can...
-  \column{0.25\textwidth}
-  totally customize the number...
-  \column{0.1\textwidth}
-  and widths of the columns.
+  \begin{align*}
+    \frac{(\bar{x}_1 - \bar{x}_2)}{\sqrt{2s^2/n}} &\leq t_\alpha \\
+    \bar{x}_1 - \bar{x}_2 &\leq t_\alpha \sqrt{2s^2/n}
+  \end{align*}
+  \pause
+  \column{0.6\textwidth}
+  \begin{align*}
+    \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{2s^2/n}} &\geq t_\beta \\
+    t_\alpha - \frac{\Delta}{\sqrt{2s^2/n}} &\geq t_\beta \\
+    t_\alpha - t_\beta &\geq \frac{\Delta \sqrt{n}}{\sqrt{2s^2}} \\
+    \frac{(t_\alpha - t_\beta) \sqrt{2s^2}}{\Delta} &\leq \sqrt{n} \\
+    2*\left(\frac{(t_\alpha - t_\beta)*s}{\Delta}\right)^2 &\leq n
+  \end{align*}
   \end{columns}
 }
 
-\subsection{Lists and tables}
-
+\subsection{06}
 \frame{
-  \frametitle{More familiar things}
+  \frametitle{The formula for 2-sample t-test}
+  \begin{block}{Minimum required sample size per group for 2-sample t-test}
+  \begin{align*}
+    n &= 2*\left(\frac{(t_\alpha - t_\beta)*s}{\Delta}\right)^2 \\
+    n &= 2*\left(\frac{(t_\alpha - t_\beta)}{d}\right)^2
+  \end{align*}
+  \end{block}
+
+  Note that the following all cause $n$ to increase:
+  \begin{itemize}
+    \item Decrease in effect size, $d$ ($\Delta$ decreasing, or $s$ increasing)
+    \item Decrease in leniency for type I error ($t_\alpha$ increasing)
+    \item Decrease in leniency for type II error ($t_\beta$ decreasing)
+  \end{itemize}
+
+  Note that the CLT plays a two-fold role: it both normalizes our data and decreases the variance ($s$) as the sample size increases.
+}
+
+\section{A worked example}
+
+\subsection{01}
+\frame{
+  \frametitle{Our data and test parameters}
+  The distribution of time spent for 18.4 million users looks like:
   \begin{columns}
   \column{0.5\textwidth}
-  Lists of all kinds (itemize, enumerate, etc)
-  \begin{itemize}
-    \item are
-    \item fair
-    \item game
-  \end{itemize}
-  \column{0.5\textwidth}
-  As are tables
-  \begin{table}
-    \scalebox{1}{
-    \begin{tabular}{c|c|c}
-    Field 1 & Field 2 & Field 3 \\ \hline \hline
-    Dat 1 & Dat 2 & Dat 3 \\
-    Dat 4 & Dat 5 & Dat 6
-    \end{tabular}
-    }
-  \end{table}
-  \end{columns}
-}
-
-\subsection{Graphics}
-
-\frame{
-  \frametitle{Obviously you can insert images too}
-  I commented the line out, since it won't compile without the photo on your drive, but I'm sure you can figure it out after inspecting the tex file.
-  % \includegraphics[scale=0.3]{citrus.jpg}
-  \vspace{10ex}
-
-  By the way, if you need to add vertical space for vertical separation (as opposed to horizontal via the columns), you can use the vspace command (even though this kind of manual adjustment is generally frowned upon in the latex community)
-}
-
-\section{Presentation specific things}
-
-\frame{
-  \frametitle{Section highlighting}
-  \tableofcontents[currentsection]
-}
-
-\subsection{Slide timings}
-
-\frame{
-  \frametitle{And subsection highlighting too}
-  \tableofcontents[currentsection, currentsubsection]
-}
-
-\frame{
-  \frametitle{Basic timings}
-  \begin{itemize}
-    \item As is so commonly used in talks...
-    \pause
-    \item You can add pauses in your talk...
-    \pause
-    \item To delay what appears on the slide
-  \end{itemize}
-  This is the most basic version of adding pauses. You can add more wrinkles, like...
-}
-
-\frame{
-  \setbeamercolor{alerted text}{fg=gray!50}
-  \frametitle{Alter slide with timing}
-  \begin{itemize}
-    \item In addition to just delaying what shows up
-    \pause
-    \item \alert<3>{You can control other aspects of timing as well}
-    \pause
-    \item Like dimming previously displayed text
-  \end{itemize}
-  Of course, you could also use that to highlight text for emphasis. Just choose a different color! This alert system is really deep and customizable, just play around with it.
-}
-
-\subsection{A custom method}
-\frame{
-  \frametitle{Citing things on slide}
-  I got pretty tired of putting source on the slide the old way, so I figured out a tiny little custom command that gives me a little shortcut for having a little citating, right bottom aligned.
-
-  \source{J. Johnson and friends}
-}
-
-\frame{
-  \frametitle{dummy title}
-  \begin{figure}
-  \centering
-  \includegraphics[scale=0.5]{iter-031.png} 
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=0.1]{fig06.png}
   \end{figure}
+  Super skewed, super high standard deviation:\\
+  $\bar{x} = 27.848$\\
+  $s = 168.73$
+  \column{0.5\textwidth}
+  We will be somewhat relaxed about our type I and type II error leniencies:
+  \begin{itemize}
+    \item $\alpha = 0.1 \rightarrow t_\alpha = 1.28$
+    \item $\beta = 0.2 \rightarrow t_\beta = -0.84$
+  \end{itemize}
+  We aren't sure what sort of effect size to expect, so we'll compute required sample sizes for a range and see what we think we can get away with.
+  \end{columns} 
 }
 
-\section{Additional beamer style options}
-
-\subsection{Blocks}
-
+\subsection{02}
 \frame{
-  \frametitle{Blocks can be used for emphasis}
-  There are a bunch of different types of blocks:
-  \begin{block}{Basic block}
-  Used for generic emphasized text
+  \begin{block}{Formula reminder}
+  \centerline{$n = 2*\left(\frac{(t_\alpha - t_\beta)*s}{\Delta}\right)^2$}
   \end{block}
-  Block environments are: block, theorem, lemma, proof, corollary, example and alertblock. 
 
-  Normal blocks are blue, examples are green and alerts are red.
-}
+  The following parameters are invariant: $t_\alpha = 1.28$, $t_\beta = 0.84$, $\bar{x} = 27.848$ and $s = 168.73$.
 
-\subsection{Algorithms}
-
-\frame{
-  \frametitle{Algorithm typesetting}
-  \begin{algorithm}[H]
-  \caption{Algorithm A}
-  \begin{algorithmic}[1]
-  \STATE The algorithmic pacakge is great for algorithms in latex
-  \STATE I tend to use inline math here $E=mc^2$
-  \FOR{$i=1$ to $N$}
-    \STATE obviously it supports for loops
-    \STATE and other control statements
-  \ENDFOR
-  \STATE check out the algorithmic package documentation for more
-  \end{algorithmic}
-  \end{algorithm}
+  \begin{table}
+  \centering
+  \begin{tabular}{c|c|c|c}
+  \% $\nearrow$ sess. time & $\Delta$ & N (each group) & \% of users to request\\ \hline \hline
+  0.1 & -0.028 & 329,988,124 & 3,595\\
+  0.5 & -0.14 & 13,199,525 & 143.8\\
+  1 & -0.28 & 3,299,881 & 36\\
+  2 & -0.56 & 824,970 & 9\\
+  5 & -1.39 & 131,995 & 1.4\\
+  10 & -2.78 & 32,999 & 0.36
+  \end{tabular}
+  \end{table}
 }
 
 \section*{}
 
 \frame{
-  \frametitle{closing words}
-  Obviously there is a ton more to do, but this should be a decent start. My favorite beamer reference when starting was Charles Batts' beamer tutorial.
+  \frametitle{Useful links}
+  Recommended tools:
+  \begin{itemize}
+    \item Standalone software: \url{http://www.gpower.hhu.de/en.html}
+    \item R package: \url{https://cran.r-project.org/web/packages/pwr/index.html}
+  \end{itemize}
 
-  The last thing I'll point out is that this slide has nothing highlighted up top. Useful to define an empty section for the acknowledgements or whatever.
+  References for learning:
+  \begin{itemize}
+    \item \url{https://onlinecourses.science.psu.edu/stat414/node/306} (check the preceding lessons too)
+    \item \url{http://www.ysumathstat.org/faculty/chang/class/s5817/L/L5817_1_2_PowerSampleSize_n.pdf}
+    \item \url{https://en.wikipedia.org/wiki/Statistical_hypothesis_testing\#Common_test_statistics}
+  \end{itemize}
 }
 
 \end{document}
