@@ -220,7 +220,7 @@
     \includegraphics[scale=0.1]{fig06.png}
   \end{figure}
   \begin{block}{Central limit theorem}
-  The average of a large number of iid samples will be normally distributed, as $\mathcal{N}(\mu, \sigma^2/n)$. Where $\mu$ and $\sigma$ are the mean and variance of the underlying distribution, and $n$ is the number of samples we are averaging over. This is true, regardless of the underlying distribution.
+  The average of a large number of iid samples will be normally distributed, as $\mathcal{N}(\mu, \sigma^2/n)$, where $\mu$ and $\sigma^2$ are the mean and variance of the underlying distribution, and $n$ is the number of samples we are averaging over. This is true, regardless of the underlying distribution.
   \end{block}
 }
 
@@ -257,7 +257,7 @@
   What we already have:
   \begin{itemize}
     \item Normally distributed data
-    \item A statistical test, and it's associated test statistic: \\ \medskip
+    \item A statistical test, and its associated test statistic: \\ \medskip
     \centerline{$t = \frac{(\bar{x}_1 - \bar{x}_2) - \Delta}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}$}
   \end{itemize}
 
@@ -344,6 +344,7 @@
     2*\left(\frac{(t_\alpha - t_\beta)*s}{\Delta}\right)^2 &\leq n
   \end{align*}
   \end{columns}
+  \source{Note: by construction, $\Delta$ is negative here, which is why we \\flip the direction of the inequality in the penultimate line.}
 }
 
 \subsection{06}
@@ -425,6 +426,7 @@
 \subsection{04}
 \frame{
   \frametitle{In R}
+  \vspace{-4ex}
   \begin{columns}
   \column{0.5\textwidth}
   \begin{figure}[]
