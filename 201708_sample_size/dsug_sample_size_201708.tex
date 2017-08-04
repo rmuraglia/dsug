@@ -351,12 +351,21 @@
 \frame{
   \frametitle{The formula for 2-sample t-test}
   \begin{block}{Minimum required sample size per group for 2-sample t-test}
+  \begin{columns}
+  \column{0.5\textwidth}
   \begin{align*}
     n &= 2*\left(\frac{(t_\alpha - t_\beta)*s}{\Delta}\right)^2 \\
     n &= 2*\left(\frac{(t_\alpha - t_\beta)}{d}\right)^2
   \end{align*}
+  \column{0.6\textwidth}
+  \begin{itemize}
+    \item $n$ is the \# of samples
+    \item $t_\alpha$, $t_\beta$ are critical test statistic values
+    \item $s$ is the sample std dev
+    \item $\Delta$ is the diff of group means
+  \end{itemize}
+  \end{columns}
   \end{block}
-
   Note that the following all cause $n$ to increase:
   \begin{itemize}
     \item Decrease in effect size, $d$ ($\Delta$ decreasing, or $s$ increasing)
