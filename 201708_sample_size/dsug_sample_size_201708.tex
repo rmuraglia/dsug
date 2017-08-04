@@ -78,13 +78,7 @@
 % your basic title page
 \frame{ \titlepage }
 
-% hi my name is Ryan Muraglia, and I am a data scientist at Oath (formerly Yahoo) Champaign, and today I'm gonna give a mini tutorial on doing sample size calculations for A/B testing.
-% now I know that this isn't exactly the sexiest topic for a talk in the world -- as data scientists, we're constantly learning new frameworks and technologies and algorithms and other impressive super fun cutting edge stuff, but /sometimes/ you'll get a request from your manager *ahem Matt*, that'll bring you back down to Earth and force you to shore up your fundamentals
-% and that's why I'm here today, to empower you all with some knowledge and tangible skills so that when you face this problem you'll be able to hit the ground running
-% one important note: this is something I just recently had to unearth from the recesses of my brain and relearn, so I'm definitely not an absolute authority on it -- if I make mistakes, please let me know, and we can have an errata on the meetup group page or something
-
 \frame{
-  % alright so let's start by having a clear problem statement to contextualize what we're doing today, so here's a maybe not-so-hypothetical situation:
   \frametitle{Problem Statement}
   To improve user engagement (as measured by daily time spent in app in seconds per user), you and your team just finished developing a new news article recommendation algorithm for your app. 
 
@@ -93,40 +87,23 @@
   Your manager says that you'll be able to submit a request to try out the new algorithm on some of the userbase, but to be careful with how much you request, since your request is more likely to get denied as you ask for more and more test users.
 }
 
-% just out of curiosity -- and I won't be drilling you if you raise your hand, so no pressure -- but who knows what they'd do if asked to do this, right off the top of their head?
-
 \frame{
   \frametitle{Ring a bell?}
   A/B testing, hypothesis testing, statistical power,  confidence intervals, $\mathcal{X}^2$ test vs $Z$-test vs student's $t$-test vs ANOVA, paired vs unpaired, one-tailed vs two-tailed, type I and type II errors...
-  % \pause
-
-  % \begin{itemize}
-  %   \item ``I just took stats last semester, but the material didn't really stick, since I was cramming for exams''
-  %   \pause
-  %   \item ``I definitely learned this at some point, but it'll take some time to retrieve that info''
-  %   \pause
-  %   \item ``The last time I thought about this, I still had hair on my head. Where's my trusty old stats book''
-  % \end{itemize}
 }
-
-% so let's solidify this skill and empower you, so that by the end of this talk, you'll be confident in tackling this problem if presented to you
 
 \section{Hypothesis testing}
 
 \subsection{01}
-% so where does this story start? with hypothesis testing.
 \frame{
   \frametitle{Searching for statistical significance}
   \begin{block}{Null and alternative hypotheses}
-  % Essentially, hypothesis testing asks the question ``are my groups statistically the same or different?''
   \begin{itemize}
     \item $H_0$: The control and experimental groups are the same
     \item $H_1$: The control and experimental groups are different
   \end{itemize}
   \end{block}
   \pause
-  % but the nature of same and different will depend greatly on your data.
-  % if you data looks like this, you would do something different from this, not to mention this, or this, or this, this, this etc
   \begin{columns}
   \column{0.3\textwidth}
   \begin{figure}[]
@@ -176,7 +153,6 @@
 }
 
 \subsection{03}
-% for now, let's focus on this [2 normals] case
 \frame{
   \frametitle{A/B testing example}
   \begin{columns}
@@ -242,12 +218,6 @@
   \end{figure}
   \end{columns}
 }
-
-% \subsection{06}
-% \frame{
-%   \frametitle{CLT take home message}
-%   As long as you are comparing means and your sample sizes are big enough, you are safe to use a t-test, even when your data are not originally normally distributed
-% }
 
 \section{Determining sample size}
 
